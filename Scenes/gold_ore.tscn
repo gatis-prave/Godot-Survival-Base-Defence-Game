@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://dky50vhnncyaf"]
+
+[ext_resource type="Texture2D" uid="uid://ci4qpkubmhp35" path="res://Assets/Sprites/Outdoor decoration/Outdoor_Decor_Free.png" id="1_8qbc5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymfl1"]
+atlas = ExtResource("1_8qbc5")
+region = Rect2(0, 80, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5o202"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymfl1")
+}],
+"loop": true,
+"name": &"large",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qcohm"]
+size = Vector2(14, 6)
+
+[node name="GoldOre" type="StaticBody2D"]
+z_index = 1
+y_sort_enabled = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5o202")
+animation = &"large"
+offset = Vector2(0, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+y_sort_enabled = true
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_qcohm")

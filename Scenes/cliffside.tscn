@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://cliffside.gd" id="1_67u24"]
 [ext_resource type="Texture2D" uid="uid://14qh7y8e8g1k" path="res://Assets/Sprites/Tiles/Path_Tile.png" id="1_y17oo"]
 [ext_resource type="Texture2D" uid="uid://b5xxbxaaxhhw8" path="res://Assets/Sprites/Tiles/Cliff_Tile.png" id="2_4sapk"]
-[ext_resource type="PackedScene" uid="uid://c5qc60sexrptp" path="res://Scenes/player.tscn" id="3_0j3rx"]
+[ext_resource type="PackedScene" uid="uid://c5qc60sexrptp" path="res://Scenes/Characters/player.tscn" id="3_0j3rx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bxbso"]
 texture = ExtResource("1_y17oo")
@@ -63,7 +63,7 @@ tile_set = SubResource("TileSet_xg7m0")
 polygon = PackedVector2Array(0, 125, 36, 125, 42, 122, 45, 109, 195, 109, 196, 111, 198, 207, 189, 213, 45, 213, 42, 203, 33, 198, 0, 197, -39, 197, -39, 125, -1, 125, -1, 122, -43, 122, -44, 203, 41, 220, 204, 222, 205, 102, 40, 101)
 
 [node name="Player" parent="." instance=ExtResource("3_0j3rx")]
-position = Vector2(31, 162)
+position = Vector2(9, 161)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-9, -161)

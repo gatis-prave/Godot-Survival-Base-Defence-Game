@@ -4,10 +4,8 @@ var firstLoad = true
 
 var currentScene = "World"
 
-var playerStartX = 68
-var playerStartY = 60
+var playerStartX = 395
+var playerStartY = 320
 
-var exitCliffsideX = 490
-var exitCliffsideY = 150
-
-var playerAttacking = false
+var exitCliffsideX = 793
+var exitCliffsideY = 304

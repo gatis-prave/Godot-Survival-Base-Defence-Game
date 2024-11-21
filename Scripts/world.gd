@@ -1,17 +1,19 @@
 extends Node2D
 
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var player = $Player
 	if global.firstLoad:
-		$Player.position.x = global.playerStartX
-		$Player.position.y = global.playerStartY
+		player.position.x = global.playerStartX
+		player.position.y = global.playerStartY
 	else:
-		$Player.position.x = global.exitCliffsideX
-		$Player.position.y = global.exitCliffsideY
+		player.position.x = global.exitCliffsideX
+		player.position.y = global.exitCliffsideY
 	
-	print("player x: ", $Player.position.x)
-	print("player y: ", $Player.position.y)
+	print("player x: ", player.position.x)
+	print("player y: ", player.position.y)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

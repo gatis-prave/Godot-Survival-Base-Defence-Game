@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cog7gxnayd6ow"]
+[gd_scene load_steps=21 format=3 uid="uid://cog7gxnayd6ow"]
 
 [ext_resource type="Texture2D" uid="uid://76nq4nxiboq1" path="res://Assets/Sprites/Enemies/Slime.png" id="1_xaayx"]
 [ext_resource type="Script" path="res://Scripts/slime.gd" id="1_xt1re"]
@@ -81,7 +81,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_uvqp0")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 7.0
 }, {
@@ -126,45 +126,39 @@ animations = [{
 "speed": 7.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_jxajf"]
-radius = 4.12311
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rw0hg"]
+radius = 4.0
+height = 8.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cncvu"]
 radius = 57.0351
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_rlsof"]
-radius = 14.0
-
 [node name="Slime" type="CharacterBody2D"]
+z_index = 1
 y_sort_enabled = true
 script = ExtResource("1_xt1re")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_p3jke")
-animation = &"idle"
+animation = &"death"
 autoplay = "idle"
-frame_progress = 0.488082
 offset = Vector2(0, -5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)
-shape = SubResource("CircleShape2D_jxajf")
+shape = SubResource("CapsuleShape2D_rw0hg")
 
 [node name="Detection_Area" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detection_Area"]
+z_index = 1
 shape = SubResource("CircleShape2D_cncvu")
-
-[node name="Hitbox" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(-1, -3)
-shape = SubResource("CircleShape2D_rlsof")
 
 [node name="DamageCooldown" type="Timer" parent="."]
 wait_time = 0.7
+one_shot = true
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 modulate = Color(0.807819, 0, 0.02829, 1)
@@ -177,6 +171,4 @@ show_percentage = false
 
 [connection signal="body_entered" from="Detection_Area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="Detection_Area" to="." method="_on_detection_area_body_exited"]
-[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
-[connection signal="body_exited" from="Hitbox" to="." method="_on_hitbox_body_exited"]
 [connection signal="timeout" from="DamageCooldown" to="." method="_on_damage_cooldown_timeout"]

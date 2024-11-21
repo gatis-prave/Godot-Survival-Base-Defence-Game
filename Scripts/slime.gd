@@ -2,7 +2,8 @@ extends CharacterBody2D
 
 const TYPE = "ENEMY"
 
-var moveSpeed = 40
+const BASE_SPEED = 40
+var speed = BASE_SPEED
 var target = null
 var targetChase = false
 
@@ -11,20 +12,23 @@ var health = BASE_HEALTH
 var dmgCldwn = false
 
 var damage = 15
-var playerInRange = false
 
 func _ready() -> void:
 	$HealthBar.max_value = BASE_HEALTH
+	update_health()
+
 
 func _physics_process(delta: float) -> void:
+	
 	if targetChase:
-		position += (target.position - position).normalized() * moveSpeed * delta
-			
+		var targetPos = (target.position - position).normalized()
+		if not dmgCldwn:
+			velocity = targetPos * speed
+		print(velocity)
+	
 		$AnimatedSprite2D.flip_h = (position > target.position)
 	
-	check_damage()
-	
-	update_health()
+	#velocity = Vector2.ZERO
 	
 	move_and_slide()
 
@@ -41,28 +45,25 @@ func _on_detection_area_body_exited(body: Node2D) -> void:
 	$AnimatedSprite2D.play("idle")
 
 
-func _on_hitbox_body_entered(body: Node2D) -> void:
-	if "TYPE" in body and body.TYPE == "PLAYER":
-		playerInRange = true
-
-func _on_hitbox_body_exited(body: Node2D) -> void:
-	if "TYPE" in body and body.TYPE == "PLAYER":
-		playerInRange = false
-
-
-func check_damage():
-	if playerInRange and global.playerAttacking and not dmgCldwn:
-		health -= target.damage
-		print("\nSlime health: ", health)
+func take_damage(attack: Attack):
+	if not dmgCldwn:
+		health -= attack.attackDamage
+		velocity = (global_position - attack.attackPosition).normalized() * attack.knockbackForce
+		
 		dmgCldwn = true
 		$DamageCooldown.start()
+		
 		if health <= 0:
+			velocity = Vector2.ZERO
 			$AnimatedSprite2D.play("death")
+			await get_tree().create_timer(0.7).timeout
 			self.queue_free()
+		update_health()
 
 # Reset damage cooldown
 func _on_damage_cooldown_timeout() -> void:
 	dmgCldwn = false
+	velocity = Vector2.ZERO
 	
 	
 func update_health():
