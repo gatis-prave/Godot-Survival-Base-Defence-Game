@@ -11,9 +11,8 @@ func _ready() -> void:
 	else:
 		player.position.x = global.exitCliffsideX
 		player.position.y = global.exitCliffsideY
-	
-	print("player x: ", player.position.x)
-	print("player y: ", player.position.y)
+		
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

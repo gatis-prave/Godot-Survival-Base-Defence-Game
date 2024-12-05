@@ -9,3 +9,21 @@ var playerStartY = 320
 
 var exitCliffsideX = 793
 var exitCliffsideY = 304
+
+enum Types {
+	Player,
+	Enemy,
+	Choppable,
+	Mineable
+}
+
+enum Tools {
+	None,
+	Sword,
+	Axe,
+	Pickaxe
+}
+
+enum Items {
+	None
+}

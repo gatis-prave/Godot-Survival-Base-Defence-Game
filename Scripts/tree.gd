@@ -1,45 +1,68 @@
 extends StaticBody2D
 
-var state = "growing" # growing, grown, chopped
-var playerInArea = false
+const TYPE = global.Types.Choppable
+
+enum States {
+	Growing,
+	Grown,
+	Chopped
+}
+var state: States = States.Growing
+
+var playerInArea: bool = false
+var player: CharacterBody2D = null
+
+var maxHealth: int = 75
+var health: int = maxHealth
+
 
 var logDrop = preload("res://Scenes/collectible.tscn")
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
+	$HealthBar.max_value = health
+	update_health()
+	
 	$GrowthTimer.wait_time = randi_range(10,20)
 	$GrowthTimer.start()
 	$AnimationPlayer.play("growing")
-
-func _physics_process(delta: float) -> void:
-	if playerInArea:
-		if Input.is_action_just_pressed("use_item"):
-			if state == "grown":
-				state = "chopped"
-				$AnimationPlayer.play('chopped')
-				
-				for drop in range(0, 4):
-					drop_log()
-			elif state == "growing":
-				$GrowthTimer.stop()
-				state = "chopped"
-				$AnimationPlayer.play('chopped_small')
-				
-				drop_log()
-
-
+	
 func _on_growth_timer_timeout() -> void:
-	state = "grown"
+	maxHealth += 50
+	health += 50
+	$HealthBar.max_value = maxHealth
+	update_health()
+	
+	state = States.Grown
 	$AnimationPlayer.play('grown')
 
 
-func _on_interact_body_entered(body: Node2D) -> void:
-	if "TYPE" in body and body.TYPE == "PLAYER":
-		playerInArea = true
+func _physics_process(delta: float) -> void:
+	pass
 
-func _on_interact_body_exited(body: Node2D) -> void:
-	if "TYPE" in body and body.TYPE == "PLAYER":
-		playerInArea = false
+
+func take_damage(attack: Attack):
+	health -= attack.attackDamage * attack.attackMultiplier
+	
+	update_health()
+	if health <= 0:
+		die()
+
+func die():
+	$HealthBar.visible = false
+	
+	if state == States.Grown:
+		state = States.Chopped
+		$AnimationPlayer.play('chopped')
+		
+		for drop in range(0, 4):
+			drop_log()
+	elif state == States.Growing:
+		$GrowthTimer.stop()
+		state = States.Chopped
+		$AnimationPlayer.play('chopped_small')
+		
+		drop_log()
 
 func drop_log():
 	$Marker2D.position.x = randi_range(-15,15)
@@ -49,3 +72,15 @@ func drop_log():
 	logInst.set_type("oak_log")
 	logInst.global_position = $Marker2D.global_position
 	get_parent().add_child(logInst)
+
+
+func update_health():
+	var healthbar = $HealthBar
+	healthbar.value = health
+	$HealthBar/Label.text = str(healthbar.value)
+	
+	if health >= maxHealth:
+		healthbar.visible = false
+		health = maxHealth
+	else:
+		healthbar.visible = true

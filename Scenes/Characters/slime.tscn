@@ -1,7 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://cog7gxnayd6ow"]
+[gd_scene load_steps=22 format=3 uid="uid://cog7gxnayd6ow"]
 
+[ext_resource type="Script" path="res://Scripts/Characters/slime.gd" id="1_5gl84"]
 [ext_resource type="Texture2D" uid="uid://76nq4nxiboq1" path="res://Assets/Sprites/Enemies/Slime.png" id="1_xaayx"]
-[ext_resource type="Script" path="res://Scripts/slime.gd" id="1_xt1re"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_goa4i"]
 atlas = ExtResource("1_xaayx")
@@ -133,10 +133,13 @@ height = 8.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_cncvu"]
 radius = 57.0351
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_76nj6"]
+radius = 11.0
+
 [node name="Slime" type="CharacterBody2D"]
 z_index = 1
 y_sort_enabled = true
-script = ExtResource("1_xt1re")
+script = ExtResource("1_5gl84")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_p3jke")
@@ -145,6 +148,7 @@ autoplay = "idle"
 offset = Vector2(0, -5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -2)
 shape = SubResource("CapsuleShape2D_rw0hg")
 
@@ -153,12 +157,15 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detection_Area"]
+visible = false
 z_index = 1
 shape = SubResource("CircleShape2D_cncvu")
 
-[node name="DamageCooldown" type="Timer" parent="."]
-wait_time = 0.7
-one_shot = true
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(-1, -3)
+shape = SubResource("CircleShape2D_76nj6")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 modulate = Color(0.807819, 0, 0.02829, 1)
@@ -171,4 +178,4 @@ show_percentage = false
 
 [connection signal="body_entered" from="Detection_Area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="Detection_Area" to="." method="_on_detection_area_body_exited"]
-[connection signal="timeout" from="DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
